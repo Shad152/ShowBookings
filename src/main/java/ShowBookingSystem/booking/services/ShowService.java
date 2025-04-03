@@ -6,6 +6,7 @@ import ShowBookingSystem.booking.entities.Slots;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class ShowService {
@@ -58,16 +59,32 @@ public class ShowService {
             }
             counter++;
         }
-        return "Ticket cancel successfully!";
+        return "Ticket canceled successfully!";
     }
     public static Slots onboardShow(Slots slot) {
+        String sTime=slot.getStartTime();
+        String eTime=slot.getEndTime();
+        Integer duration=Integer.parseInt(eTime.substring(0,sTime.length()-3))-Integer.parseInt(sTime.substring(0,sTime.length()-3));
+        if(duration!=1){
+            return null;
+        }
     }
 
 
 
     public List<Slots> getAllShows() {
+        List<Slots> allSlots = new ArrayList<>();
+        for (List<Slots> slots : availableSlots.values()) {
+            allSlots.addAll(slots);
+        }
+        return allSlots;
     }
 
     public List<Slots> getAvialByGenre(String genreName) {
+        return shows.stream()
+                .filter(show -> show.getGenres().equals(genreName))
+                .flatMap(show -> availableSlots.getOrDefault(show.getShowName(), List.of()).stream())
+                .sorted(Comparator.comparing(Slots::getStartTime))  // Sorting by start time
+                .collect(Collectors.toList());
     }
 }
