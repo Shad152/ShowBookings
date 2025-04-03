@@ -68,6 +68,7 @@ public class ShowService {
         if(duration!=1){
             return null;
         }
+        return slot;
     }
 
 

@@ -49,10 +49,15 @@ public class ShowController {
     @PostMapping(path = "/onboardShowSlot")
     public ResponseEntity<String> onboardShowSlot(@RequestBody Slots slot){
         Slots onboardedSlot=ShowService.onboardShow(slot);
+        if(onboardedSlot==null){
+            return ResponseEntity.badRequest().body(" Can not onboard this show in this slot");
+        }
+        return ResponseEntity.ok("Successfully onboarded this show");
     }
     @DeleteMapping(path = "/cancelTicket/bookingId")
     public ResponseEntity<String> cancelBookingId(@PathVariable Long bookingId){
         String response = ShowService.canceledTicket(bookingId);
+        return ResponseEntity.ok(response);
     }
 
 
