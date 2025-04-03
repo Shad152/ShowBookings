@@ -52,7 +52,7 @@ public class ShowController {
     }
     @DeleteMapping(path = "/cancelTicket/bookingId")
     public ResponseEntity<String> cancelBookingId(@PathVariable Long bookingId){
-
+        String response = ShowService.canceledTicket(bookingId);
     }
 
 
