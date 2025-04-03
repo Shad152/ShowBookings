@@ -11,7 +11,7 @@ import java.util.*;
 public class ShowService {
     private static final Set<Show> shows= new HashSet<>();
     private static final Map<String,List<Slots>> availableSlots= new HashMap<>();
-    private static final Queue<Bookings> canceledTicket= new LinkedList<>();
+    private static final Queue<Bookings> waitingList= new LinkedList<>();
     private static final Map<Long,Bookings>  allBookings= new HashMap<>();
 
     public static Show registerShow(Show show) {
@@ -24,7 +24,7 @@ public class ShowService {
 
     public static Bookings bookTicket(Bookings booking) {
        if(booking.getSeatsBooked()>booking.getSlot().getAvailableSeats()){
-           canceledTicket.offer(booking);
+           waitingList.offer(booking);
            return null;
        }
        allBookings.put(booking.getId(),booking);
@@ -34,7 +34,31 @@ public class ShowService {
        return booking;
     }
     public static String canceledTicket(Long bookingId) {
-
+        Bookings canceledBooking= allBookings.remove(bookingId);
+        if(canceledBooking==null){
+            return "This booking doesn't exist";
+        }
+        int totalBooked=canceledBooking.getSeatsBooked();
+        int totalWaiting=waitingList.size();
+        Slots slot= canceledBooking.getSlot();
+        Show canceledBookingShow=canceledBooking.getSlot().getShow();
+        int remainingSeats=slot.getAvailableSeats();
+        slot.setAvailableSeats(remainingSeats+totalBooked);
+        int totalNow=totalBooked+remainingSeats;
+        int counter=0;
+        while(counter<totalWaiting){
+            Bookings nextBooking= waitingList.poll();
+            int requiredSeats= nextBooking.getSeatsBooked();
+            if(nextBooking.getSlot().getShow().equals(canceledBookingShow) && nextBooking.getSlot().getStartTime().equals(canceledBooking.getSlot().getStartTime()) &&  requiredSeats<=totalNow){
+                allBookings.put(nextBooking.getId(),nextBooking);
+                nextBooking.getSlot().setAvailableSeats(totalNow-requiredSeats);
+            }
+            else{
+                waitingList.offer(nextBooking);
+            }
+            counter++;
+        }
+        return "Ticket cancel successfully!";
     }
     public static Slots onboardShow(Slots slot) {
     }

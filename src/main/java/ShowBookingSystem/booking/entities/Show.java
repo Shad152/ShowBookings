@@ -12,22 +12,17 @@ import java.util.Objects;
 public class Show {
     private String showName;
     private String genres;
+
     @Override
-    public int hashCode(){
-        int hash=Objects.hash(showName,genres);
-        return hash;
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Show show = (Show) o;
+        return Objects.equals(showName, show.showName) && Objects.equals(genres, show.genres);
     }
+
     @Override
-    public boolean equals(Object other){
-        if(this.getClass()!=other.getClass()){
-            return false;
-        }
-        if(other==null || this==null){
-            return false;
-        }
-        if(this.showName!=((Show) other).showName || this.genres!=((Show) other).genres ){
-            return false;
-        }
-        return true;
+    public int hashCode() {
+        return Objects.hash(showName, genres);
     }
 }
