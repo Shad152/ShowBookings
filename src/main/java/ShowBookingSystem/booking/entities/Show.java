@@ -11,11 +11,10 @@ import java.util.Objects;
 @NoArgsConstructor
 public class Show {
     private String showName;
-    private Long organizerId;
     private String genres;
     @Override
     public int hashCode(){
-        int hash=Objects.hash(showName,organizerId,genres);
+        int hash=Objects.hash(showName,genres);
         return hash;
     }
     @Override
@@ -26,7 +25,7 @@ public class Show {
         if(other==null || this==null){
             return false;
         }
-        if(this.showName!=((Show) other).showName || this.genres!=((Show) other).genres || this.organizerId!=((Show) other).organizerId){
+        if(this.showName!=((Show) other).showName || this.genres!=((Show) other).genres ){
             return false;
         }
         return true;
