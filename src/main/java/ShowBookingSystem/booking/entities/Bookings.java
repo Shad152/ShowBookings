@@ -11,5 +11,5 @@ public class Bookings {
     private Long id;
     private User user;
     private Slots slot;
-    private Integer seats;
+    private Integer seatsBooked;
 }

@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Slots {
-    private Long id;
     private String startTime;
     private String endTime;
     private Integer availableSeats;
